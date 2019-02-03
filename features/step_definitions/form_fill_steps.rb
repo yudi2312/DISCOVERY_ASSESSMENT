@@ -1,8 +1,12 @@
 When(/^the user adds (\d+) recommended videos to favorites$/) do |no_of_video|
-  @expected_count = no_of_video
   recommended_section = on_page(HomePage).recommended_for_you_element
+  if recommended_section.divs(:class => ["carousel-tile-wrapper", "carousel__tileWrapper"]).size < no_of_video
+    fail "Total Number of recommended videos are less than the provided number #{no_of_video}"
+  end
+  @expected_count = no_of_video
   ctr = 0
   @added_shows = Hash.new
+
   recommended_section.divs(:class => ["carousel-tile-wrapper", "carousel__tileWrapper"]).each do |video|
     ctr += 1
     video.hover
